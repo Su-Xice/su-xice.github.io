@@ -1,1 +1,1068 @@
-<h1>Welcome!</h1>
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="九环互联工作室 - 专注代码开发与云服务项目，为您提供稳定、高效的技术解决方案">
+<meta name="keywords" content="九环互联,代码开发,云服务,定制开发,服务器托管">
+<meta name="theme-color" content="#4895ef">
+<title>九环互联工作室 | JiuHuan Interconnect Studio</title>
+<style>
+    /* ============ 设计令牌 ============ */
+    :root {
+        --primary: #4895ef;
+        --primary-light: #4cc9f0;
+        --primary-dark: #3a7bd5;
+        --bg: #ffffff;
+        --bg-secondary: #f8fafc;
+        --text: #1e293b;
+        --text-secondary: #64748b;
+        --glass-bg: rgba(255, 255, 255, 0.72);
+        --glass-border: rgba(255, 255, 255, 0.4);
+        --shadow-sm: 0 2px 8px rgba(72, 149, 239, 0.08);
+        --shadow-md: 0 8px 32px rgba(72, 149, 239, 0.12);
+        --shadow-lg: 0 16px 48px rgba(72, 149, 239, 0.18);
+        --radius-sm: 8px;
+        --radius-md: 16px;
+        --radius-lg: 24px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+        --bg: #0b1220;
+        --bg-secondary: #131c31;
+        --text: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --glass-bg: rgba(19, 28, 49, 0.72);
+        --glass-border: rgba(255, 255, 255, 0.08);
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ============ 基础重置 ============ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                     "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        min-height: 100vh;
+        transition: background-color var(--transition), color var(--transition);
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* 背景图层 */
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: var(--bg-image, none);
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        z-index: -2;
+        opacity: 0.35;
+        transition: opacity var(--transition);
+    }
+
+    [data-theme="dark"] body::before { opacity: 0.18; }
+
+    body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(180deg,
+            rgba(255,255,255,0.4) 0%,
+            rgba(255,255,255,0.7) 50%,
+            rgba(255,255,255,0.4) 100%);
+        z-index: -1;
+        transition: background var(--transition);
+    }
+
+    [data-theme="dark"] body::after {
+        background: linear-gradient(180deg,
+            rgba(11,18,32,0.6) 0%,
+            rgba(11,18,32,0.85) 50%,
+            rgba(11,18,32,0.6) 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button { font-family: inherit; }
+
+    /* ============ 毛玻璃通用 ============ */
+    .glass {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* ============ 导航栏 ============ */
+    .navbar {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 1000;
+        padding: 14px 5%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all var(--transition);
+    }
+
+    .navbar.scrolled {
+        padding: 10px 5%;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .logo-wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+    }
+
+    .logo {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--primary);
+        background: var(--bg-secondary);
+        flex-shrink: 0;
+    }
+
+    .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+    .brand-name { font-size: 17px; font-weight: 700; color: var(--text); }
+    .brand-slogan { font-size: 11px; color: var(--text-secondary); letter-spacing: 0.5px; }
+
+    .nav-menu {
+        display: flex;
+        gap: 32px;
+        list-style: none;
+    }
+
+    .nav-menu a {
+        color: var(--text);
+        font-weight: 500;
+        font-size: 15px;
+        position: relative;
+        padding: 4px 0;
+        transition: color var(--transition);
+    }
+
+    .nav-menu a::after {
+        content: "";
+        position: absolute;
+        left: 0; bottom: 0;
+        width: 0; height: 2px;
+        background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        transition: width var(--transition);
+    }
+
+    .nav-menu a:hover { color: var(--primary); }
+    .nav-menu a:hover::after { width: 100%; }
+
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    .theme-toggle, .menu-toggle {
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--glass-border);
+        background: var(--glass-bg);
+        color: var(--text);
+        cursor: pointer;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all var(--transition);
+    }
+
+    .theme-toggle:hover, .menu-toggle:hover {
+        transform: rotate(15deg);
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .menu-toggle { display: none; }
+
+    /* ============ Hero ============ */
+    .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 120px 5% 80px;
+        text-align: center;
+    }
+
+    .hero-content {
+        max-width: 880px;
+        padding: 60px 40px;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        padding: 6px 16px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        font-size: 13px;
+        color: var(--primary);
+        font-weight: 500;
+        margin-bottom: 24px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .hero h1 {
+        font-size: clamp(32px, 5.5vw, 60px);
+        font-weight: 800;
+        line-height: 1.15;
+        margin-bottom: 24px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero .subtitle {
+        font-size: clamp(15px, 1.6vw, 18px);
+        color: var(--text-secondary);
+        margin-bottom: 40px;
+        max-width: 640px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 32px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        border: none;
+        transition: all var(--transition);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(72, 149, 239, 0.35);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px rgba(72, 149, 239, 0.5);
+    }
+
+    .btn-ghost {
+        background: var(--glass-bg);
+        color: var(--text);
+        border: 1px solid var(--glass-border);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .btn-ghost:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        transform: translateY(-2px);
+    }
+
+    /* ============ 通用 Section ============ */
+    section { padding: 90px 5%; position: relative; }
+
+    .section-head { text-align: center; margin-bottom: 56px; }
+
+    .section-title {
+        font-size: clamp(26px, 3.5vw, 38px);
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .section-subtitle {
+        color: var(--text-secondary);
+        font-size: 16px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .section-title .accent {
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    /* ============ 服务板块 ============ */
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .service-card {
+        padding: 36px 28px;
+        text-align: left;
+        transition: transform var(--transition), box-shadow var(--transition);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .service-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--primary-light));
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform var(--transition);
+    }
+
+    .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-icon {
+        width: 56px; height: 56px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        color: #fff;
+        margin-bottom: 20px;
+    }
+
+    .service-card h3 {
+        font-size: 19px;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+
+    .service-card p {
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .service-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 16px;
+    }
+
+    .service-tags span {
+        padding: 3px 10px;
+        background: rgba(72, 149, 239, 0.1);
+        color: var(--primary);
+        border-radius: 12px;
+        font-size: 12px;
+    }
+
+    /* ============ 团队板块 ============ */
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 24px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .team-card {
+        padding: 32px 20px;
+        text-align: center;
+        transition: transform var(--transition);
+    }
+
+    .team-card:hover { transform: translateY(-4px); }
+
+    .team-avatar {
+        width: 88px; height: 88px;
+        border-radius: 50%;
+        margin: 0 auto 16px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 32px;
+        font-weight: 700;
+        border: 3px solid var(--glass-border);
+    }
+
+    .team-card h4 { font-size: 17px; margin-bottom: 4px; }
+    .team-card .role { color: var(--primary); font-size: 13px; margin-bottom: 10px; }
+    .team-card .desc { color: var(--text-secondary); font-size: 13px; }
+
+    /* ============ 服务器分布 ============ */
+    .regions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .region-item {
+        padding: 22px 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        transition: transform var(--transition);
+    }
+
+    .region-item:hover { transform: translateY(-3px); }
+
+    .region-flag {
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+
+    .region-info .region-name { font-weight: 600; font-size: 15px; }
+    .region-info .region-status {
+        font-size: 12px;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .status-dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 8px #10b981;
+    }
+
+    /* ============ 合作商 / 友链 ============ */
+    .partners-grid, .links-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        justify-content: center;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .partner-item, .link-item {
+        padding: 14px 24px;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all var(--transition);
+        cursor: pointer;
+    }
+
+    .partner-item:hover, .link-item:hover {
+        transform: translateY(-2px);
+        color: var(--primary);
+        border-color: var(--primary);
+    }
+
+    /* ============ 用户评论 ============ */
+    .reviews-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .review-card { padding: 28px; }
+
+    .review-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .review-avatar {
+        width: 44px; height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .review-user .name { font-weight: 600; font-size: 15px; }
+    .review-user .meta { font-size: 12px; color: var(--text-secondary); }
+
+    .review-stars { color: #f59e0b; font-size: 14px; margin-bottom: 10px; }
+    .review-text { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+
+    /* ============ 联系信息 ============ */
+    .contact-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 48px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 32px;
+    }
+
+    .contact-item { text-align: center; }
+
+    .contact-icon {
+        width: 52px; height: 52px;
+        margin: 0 auto 14px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 22px;
+    }
+
+    .contact-item h4 { font-size: 15px; margin-bottom: 6px; }
+    .contact-item p { color: var(--text-secondary); font-size: 14px; }
+
+    /* ============ IP 信息条 ============ */
+    .ip-bar {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 10px 16px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        z-index: 900;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+
+    .ip-bar .dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        background: #10b981;
+    }
+
+    /* ============ 页脚 ============ */
+    footer {
+        padding: 40px 5%;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 13px;
+        border-top: 1px solid var(--glass-border);
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+
+    footer a { color: var(--primary); margin: 0 6px; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ============ 响应式 ============ */
+    @media (max-width: 900px) {
+        .nav-menu { display: none; }
+        .menu-toggle { display: flex; }
+        .nav-menu.open {
+            display: flex;
+            position: absolute;
+            top: 100%; left: 5%; right: 5%;
+            flex-direction: column;
+            padding: 20px;
+            gap: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+        }
+        .hero-content { padding: 40px 20px; }
+        .contact-wrap { padding: 32px 20px; }
+        .ip-bar { bottom: 10px; right: 10px; font-size: 11px; padding: 8px 12px; }
+    }
+
+    @media (max-width: 480px) {
+        .brand-slogan { display: none; }
+        section { padding: 60px 5%; }
+    }
+
+    /* ============ 动画 ============ */
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+        opacity: 0;
+        animation: fadeUp 0.8s ease forwards;
+    }
+
+    .fade-up.delay-1 { animation-delay: 0.15s; }
+    .fade-up.delay-2 { animation-delay: 0.3s; }
+    .fade-up.delay-3 { animation-delay: 0.45s; }
+
+    /* 减少动画偏好 */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+</head>
+<body>
+
+<!-- ============ 导航栏 ============ -->
+<header class="navbar glass" id="navbar" role="banner">
+    <div class="logo-wrap" onclick="scrollTo({top:0,behavior:'smooth'})">
+        <img class="logo" id="logoImg"
+             src="html/jiuhuanlogo.png"
+             alt="九环互联工作室 Logo"
+             onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22><circle cx=%2224%22 cy=%2224%22 r=%2222%22 fill=%22%234895ef%22/><text x=%2224%22 y=%2231%22 font-size=%2220%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22 font-family=%22sans-serif%22>九</text></svg>';">
+        <div class="brand-text">
+            <span class="brand-name">九环互联工作室</span>
+            <span class="brand-slogan">JIUHUAN INTERCONNECT</span>
+        </div>
+    </div>
+
+    <nav aria-label="主导航">
+        <ul class="nav-menu" id="navMenu">
+            <li><a href="#services">服务项目</a></li>
+            <li><a href="#team">团队介绍</a></li>
+            <li><a href="#regions">节点分布</a></li>
+            <li><a href="#partners">合作伙伴</a></li>
+            <li><a href="#reviews">客户评价</a></li>
+            <li><a href="#contact">联系我们</a></li>
+        </ul>
+    </nav>
+
+    <div class="nav-actions">
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题">🌙</button>
+        <button class="menu-toggle" id="menuToggle" aria-label="打开菜单">☰</button>
+    </div>
+</header>
+
+<main>
+    <!-- ============ Hero ============ -->
+    <section class="hero" id="home">
+        <div class="hero-content glass fade-up">
+            <span class="hero-badge">✨ 专注代码开发与云服务</span>
+            <h1>九环互联<br>让技术连接无限可能</h1>
+            <p class="subtitle">
+                我们是一支专注于代码开发与云服务项目的工作室，为企业与开发者提供稳定、高效、可扩展的技术解决方案。
+            </p>
+            <div class="hero-actions">
+                <a href="#services" class="btn btn-primary">了解服务 →</a>
+                <a href="#contact" class="btn btn-ghost">联系我们</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 服务 ============ -->
+    <section id="services">
+        <div class="section-head">
+            <h2 class="section-title">我们的<span class="accent">核心服务</span></h2>
+            <p class="section-subtitle">从代码开发到云端部署，为您提供一站式技术服务</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card glass">
+                <div class="service-icon">💻</div>
+                <h3>定制代码开发</h3>
+                <p>根据业务需求提供 Web 应用、小程序、后台系统等定制化开发服务，代码规范、可维护性强。</p>
+                <div class="service-tags">
+                    <span>PHP</span><span>Python</span><span>JavaScript</span><span>Go</span>
+                </div>
+            </div>
+            <div class="service-card glass">
+                <div class="service-icon">☁️</div>
+                <h3>云服务项目</h3>
+                <p>提供云服务器托管、云电脑、对象存储、CDN 加速等云服务，保障业务高可用与高性能。</p>
+                <div class="service-tags">
+                    <span>云电脑</span><span>服务器托管</span><span>CDN</span>
+                </div>
+            </div>
+            <div class="service-card glass">
+                <div class="service-icon">🛡️</div>
+                <h3>运维与安全</h3>
+                <p>7×24 小时运维监控、HTTPS 证书部署、漏洞扫描、数据备份与灾难恢复方案。</p>
+                <div class="service-tags">
+                    <span>安全审计</span><span>自动备份</span><span>监控告警</span>
+                </div>
+            </div>
+            <div class="service-card glass">
+                <div class="service-icon">🔗</div>
+                <h3>API 与集成</h3>
+                <p>OAuth 第三方登录、支付接口、短信邮件通知、第三方平台对接等集成开发。</p>
+                <div class="service-tags">
+                    <span>OAuth</span><span>支付</span><span>消息推送</span>
+                </div>
+            </div>
+            <div class="service-card glass">
+                <div class="service-icon">🎨</div>
+                <h3>UI / UX 设计</h3>
+                <p>简洁现代的界面设计，支持深浅模式切换、响应式布局、毛玻璃等现代视觉风格。</p>
+                <div class="service-tags">
+                    <span>响应式</span><span>深浅模式</span><span>品牌定制</span>
+                </div>
+            </div>
+            <div class="service-card glass">
+                <div class="service-icon">📊</div>
+                <h3>技术咨询</h3>
+                <p>架构设计评审、技术选型建议、性能优化方案、团队技术培训等顾问服务。</p>
+                <div class="service-tags">
+                    <span>架构评审</span><span>性能优化</span><span>培训</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 团队 ============ -->
+    <section id="team">
+        <div class="section-head">
+            <h2 class="section-title">我们的<span class="accent">团队</span></h2>
+            <p class="section-subtitle">由资深开发者与运维工程师组成的专业团队</p>
+        </div>
+        <div class="team-grid">
+            <div class="team-card glass">
+                <div class="team-avatar">JH</div>
+                <h4>九环</h4>
+                <div class="role">创始人 / 架构师</div>
+                <p class="desc">负责整体技术架构与项目方向</p>
+            </div>
+            <div class="team-card glass">
+                <div class="team-avatar">DEV</div>
+                <h4>开发组</h4>
+                <div class="role">全栈工程师</div>
+                <p class="desc">Web / 移动端 / 后端开发</p>
+            </div>
+            <div class="team-card glass">
+                <div class="team-avatar">OPS</div>
+                <h4>运维组</h4>
+                <div class="role">运维工程师</div>
+                <p class="desc">服务器部署、监控、安全防护</p>
+            </div>
+            <div class="team-card glass">
+                <div class="team-avatar">UI</div>
+                <h4>设计组</h4>
+                <div class="role">UI / UX 设计师</div>
+                <p class="desc">视觉设计与用户体验优化</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 节点分布 ============ -->
+    <section id="regions">
+        <div class="section-head">
+            <h2 class="section-title">全球<span class="accent">节点分布</span></h2>
+            <p class="section-subtitle">多地域节点部署，为您的业务提供就近接入与低延迟体验</p>
+        </div>
+        <div class="regions-grid">
+            <div class="region-item glass">
+                <div class="region-flag">🇨🇳</div>
+                <div class="region-info">
+                    <div class="region-name">中国大陆</div>
+                    <div class="region-status"><span class="status-dot"></span>运行中</div>
+                </div>
+            </div>
+            <div class="region-item glass">
+                <div class="region-flag">🇭🇰</div>
+                <div class="region-info">
+                    <div class="region-name">中国香港</div>
+                    <div class="region-status"><span class="status-dot"></span>运行中</div>
+                </div>
+            </div>
+            <div class="region-item glass">
+                <div class="region-flag">🇯🇵</div>
+                <div class="region-info">
+                    <div class="region-name">日本东京</div>
+                    <div class="region-status"><span class="status-dot"></span>运行中</div>
+                </div>
+            </div>
+            <div class="region-item glass">
+                <div class="region-flag">🇸🇬</div>
+                <div class="region-info">
+                    <div class="region-name">新加坡</div>
+                    <div class="region-status"><span class="status-dot"></span>运行中</div>
+                </div>
+            </div>
+            <div class="region-item glass">
+                <div class="region-flag">🇺🇸</div>
+                <div class="region-info">
+                    <div class="region-name">美国洛杉矶</div>
+                    <div class="region-status"><span class="status-dot"></span>运行中</div>
+                </div>
+            </div>
+            <div class="region-item glass">
+                <div class="region-flag">🇩🇪</div>
+                <div class="region-info">
+                    <div class="region-name">德国法兰克福</div>
+                    <div class="region-status"><span class="status-dot"></span>运行中</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 合作伙伴 ============ -->
+    <section id="partners">
+        <div class="section-head">
+            <h2 class="section-title">合作<span class="accent">伙伴</span></h2>
+            <p class="section-subtitle">感谢以下伙伴的信任与支持</p>
+        </div>
+        <div class="partners-grid">
+            <div class="partner-item glass">Cloudflare</div>
+            <div class="partner-item glass">阿里云</div>
+            <div class="partner-item glass">腾讯云</div>
+            <div class="partner-item glass">华为云</div>
+            <div class="partner-item glass">又拍云</div>
+            <div class="partner-item glass">GitHub</div>
+        </div>
+
+        <div class="section-head" style="margin-top:64px;">
+            <h3 class="section-title" style="font-size:24px;">友情<span class="accent">链接</span></h3>
+        </div>
+        <div class="links-grid">
+            <a class="link-item glass" href="#" rel="noopener">示例友链 1</a>
+            <a class="link-item glass" href="#" rel="noopener">示例友链 2</a>
+            <a class="link-item glass" href="#" rel="noopener">示例友链 3</a>
+            <a class="link-item glass" href="#" rel="noopener">示例友链 4</a>
+        </div>
+    </section>
+
+    <!-- ============ 用户评论 ============ -->
+    <section id="reviews">
+        <div class="section-head">
+            <h2 class="section-title">客户<span class="accent">评价</span></h2>
+            <p class="section-subtitle">来自真实客户的反馈</p>
+        </div>
+        <div class="reviews-grid">
+            <div class="review-card glass">
+                <div class="review-header">
+                    <div class="review-avatar">A</div>
+                    <div class="review-user">
+                        <div class="name">客户 A</div>
+                        <div class="meta">企业用户 · 2026</div>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">代码质量高，交付准时，售后响应非常及时，是值得长期合作的技术团队。</p>
+            </div>
+            <div class="review-card glass">
+                <div class="review-header">
+                    <div class="review-avatar">B</div>
+                    <div class="review-user">
+                        <div class="name">客户 B</div>
+                        <div class="meta">个人开发者 · 2026</div>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">云服务项目稳定运行超过一年，几乎没有 downtime，运维团队非常专业。</p>
+            </div>
+            <div class="review-card glass">
+                <div class="review-header">
+                    <div class="review-avatar">C</div>
+                    <div class="review-user">
+                        <div class="name">客户 C</div>
+                        <div class="meta">初创团队 · 2026</div>
+                    </div>
+                </div>
+                <div class="review-stars">★★★★★</div>
+                <p class="review-text">从需求分析到上线部署全程跟进，沟通顺畅，方案也很贴合我们的业务。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ 联系 ============ -->
+    <section id="contact">
+        <div class="section-head">
+            <h2 class="section-title">联系<span class="accent">我们</span></h2>
+            <p class="section-subtitle">期待与您合作，共创未来</p>
+        </div>
+        <div class="contact-wrap glass">
+            <div class="contact-item">
+                <div class="contact-icon">✉️</div>
+                <h4>客服邮箱</h4>
+                <p>support@jiuhuan.example</p>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">🕐</div>
+                <h4>工作时间</h4>
+                <p>周一至周日 9:00 - 22:00</p>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">💬</div>
+                <h4>在线客服</h4>
+                <p>QQ / 微信 咨询</p>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <h4>工作室地址</h4>
+                <p>线上协作 · 远程服务</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ============ IP 信息条 ============ -->
+<div class="ip-bar glass" id="ipBar" aria-live="polite">
+    <span class="dot"></span>
+    <span id="ipText">正在获取网络信息…</span>
+</div>
+
+<!-- ============ 页脚 ============ -->
+<footer>
+    <p>
+        © 2024 - 2026 <strong>九环互联工作室</strong> · JiuHuan Interconnect Studio
+    </p>
+    <p style="margin-top:8px;">
+        <a href="#">服务条款</a> ·
+        <a href="#">隐私政策</a> ·
+        <a href="#">免责声明</a>
+    </p>
+</footer>
+
+<script>
+(function () {
+    'use strict';
+
+    /* ============ 1. 主题切换 ============ */
+    var themeToggle = document.getElementById('themeToggle');
+    var htmlEl = document.documentElement;
+
+    function applyTheme(theme) {
+        htmlEl.setAttribute('data-theme', theme);
+        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        themeToggle.setAttribute('aria-label', theme === 'dark' ? '切换为浅色模式' : '切换为深色模式');
+    }
+
+    // 初始化主题：优先读取本地存储，其次跟随系统
+    try {
+        var savedTheme = localStorage.getItem('jiuhuan-theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+            applyTheme(savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            applyTheme('dark');
+        }
+    } catch (e) { /* 隐私模式下 localStorage 不可用 */ }
+
+    themeToggle.addEventListener('click', function () {
+        var current = htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(current);
+        try { localStorage.setItem('jiuhuan-theme', current); } catch (e) {}
+    });
+
+    /* ============ 2. 随机背景图 ============ */
+    (function loadRandomBg() {
+        var idx = Math.floor(Math.random() * 11); // 0 ~ 10
+        var url = 'beijin/' + idx + '.png';
+        var img = new Image();
+        img.onload = function () {
+            document.body.style.setProperty('--bg-image', 'url("' + url + '")');
+        };
+        img.onerror = function () {
+            // 失败则尝试下一张，最多重试 3 次
+            var next = (idx + 1) % 11;
+            var fallback = 'beijin/' + next + '.png';
+            var img2 = new Image();
+            img2.onload = function () {
+                document.body.style.setProperty('--bg-image', 'url("' + fallback + '")');
+            };
+            img2.src = fallback;
+        };
+        img.src = url;
+    })();
+
+    /* ============ 3. 导航栏滚动效果 ============ */
+    var navbar = document.getElementById('navbar');
+    var lastScroll = 0;
+    window.addEventListener('scroll', function () {
+        var y = window.scrollY || window.pageYOffset;
+        if (y > 30) navbar.classList.add('scrolled');
+        else navbar.classList.remove('scrolled');
+        lastScroll = y;
+    }, { passive: true });
+
+    /* ============ 4. 移动端菜单 ============ */
+    var menuToggle = document.getElementById('menuToggle');
+    var navMenu = document.getElementById('navMenu');
+    menuToggle.addEventListener('click', function () {
+        navMenu.classList.toggle('open');
+    });
+    // 点击菜单项后关闭
+    navMenu.addEventListener('click', function (e) {
+        if (e.target.tagName === 'A') navMenu.classList.remove('open');
+    });
+
+    /* ============ 5. IP 与地理位置 ============ */
+    var ipText = document.getElementById('ipText');
+    function fetchIpInfo() {
+        // 使用 ipapi.co（非 Google 服务），失败则静默降级
+        fetch('https://ipapi.co/json/', { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+            .then(function (data) {
+                if (data && data.ip) {
+                    var loc = [data.city, data.region, data.country_name].filter(Boolean).join(' · ');
+                    ipText.textContent = 'IP: ' + data.ip + (loc ? '  |  ' + loc : '');
+                } else {
+                    ipText.textContent = '网络信息获取失败';
+                }
+            })
+            .catch(function () {
+                ipText.textContent = '网络信息暂不可用';
+            });
+    }
+    // 延迟加载，避免阻塞首屏
+    setTimeout(fetchIpInfo, 800);
+
+    /* ============ 6. 平滑滚动兼容 ============ */
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+            var id = this.getAttribute('href');
+            if (id.length > 1) {
+                var target = document.querySelector(id);
+                if (target) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+
+})();
+</script>
+
+</body>
+</html>
